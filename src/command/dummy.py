@@ -30,7 +30,7 @@ class DummyCommand(AbstractCommand):
             data.append({
                 'index': i,
                 'name': 'event {}'.format(i),
-                'type': 'welcome',
+                'type': 'welcome, it\'s a "dummy" text',
             })
         self.print(output, data)
 

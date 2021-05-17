@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
 import click
 import json
+import csv
+import sys
 
 
 class AbstractCommand():
@@ -24,12 +26,9 @@ class AbstractCommand():
 
         if output == self.OUTPUT_CSV:
             header = list(data[0].keys())
-            columns = ['name', 'status', 'time_last']
-            print(','.join(header))
-
-            for elt in data:
-                values = [elt[col] for col in header]
-                print(','.join(str(value) for value in values))
+            writer = csv.DictWriter(sys.stdout, quoting=csv.QUOTE_NONNUMERIC, quotechar='"', fieldnames=header)
+            writer.writeheader()
+            writer.writerows(data)
 
     def get_option_output(self):
         return click.Option(
