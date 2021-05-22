@@ -5,21 +5,21 @@ from src.command.abstract import AbstractCommand
 
 class DummyCommand(AbstractCommand):
     def get_commands(self):
-        group = click.Group('dummy')
+        group = click.Group('dummy', context_settings=dict(terminal_width=120))
 
         group.add_command(click.Command(
-            name='a_command', help='helper for the command', callback=self.a_command,
-            params=[self.get_option_output()],
-            context_settings=dict(max_content_width=120)
+            name='a_command', help='helper for the command',
+            callback=self.a_command,
+            params=[self.get_option_output()]
         ))
 
         group.add_command(click.Command(
-            name='another_command', help='helper of command', callback=self.another_command,
+            name='another_command', help='helper of command',
+            callback=self.another_command,
             params=[
                 self.get_option_output(),
                 self.get_option_meow(),
-            ],
-            context_settings=dict(max_content_width=120)
+            ]
         ))
 
         return group
