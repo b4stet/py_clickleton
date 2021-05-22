@@ -17,7 +17,7 @@ class AbstractCommand():
     def get_commands(self):
         raise NotImplementedError('Method get_commands must be implemented on class {}'.format(type(self)))
 
-    def print(self, output: str, data: list):
+    def _print_formatted(self, output: str, data: list):
         if len(data) == 0:
             return
 
@@ -30,7 +30,7 @@ class AbstractCommand():
             writer.writeheader()
             writer.writerows(data)
 
-    def get_option_output(self):
+    def _get_option_output(self):
         return click.Option(
             ['--output', '-o', 'output'],
             help='Format to output result. Default is json',
@@ -38,10 +38,29 @@ class AbstractCommand():
             type=click.Choice(self.OUTPUTS)
         )
 
-    def get_option_meow(self):
+    def _get_option_meow(self):
         return click.Option(
             ['--meow', '-m', 'meows'],
             help='An option that can be repeated',
             multiple=True,
             type=str
         )
+
+    def _get_option_flag_prompt(self):
+        return click.Option(
+            ['--flag', '-f', 'flag'],
+            is_flag=True,
+            default=False,
+            help='Prompt for something sensitive like password',
+            callback=self._prompt_flag
+        )
+
+    def _prompt_flag(self, ctx, param, flag):
+        if flag is True:
+            text = click.prompt(
+                text='Enter something',
+                hide_input=True,
+                confirmation_prompt=True
+            )
+
+            return text

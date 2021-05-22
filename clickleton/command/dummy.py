@@ -1,6 +1,6 @@
 import click
 import json
-from src.command.abstract import AbstractCommand
+from clickleton.command.abstract import AbstractCommand
 
 
 class DummyCommand(AbstractCommand):
@@ -10,15 +10,16 @@ class DummyCommand(AbstractCommand):
         group.add_command(click.Command(
             name='a_command', help='helper for the command',
             callback=self.a_command,
-            params=[self.get_option_output()]
+            params=[self._get_option_output()]
         ))
 
         group.add_command(click.Command(
             name='another_command', help='helper of command',
             callback=self.another_command,
             params=[
-                self.get_option_output(),
-                self.get_option_meow(),
+                self._get_option_output(),
+                self._get_option_meow(),
+                self._get_option_flag_prompt(),
             ]
         ))
 
@@ -32,7 +33,7 @@ class DummyCommand(AbstractCommand):
                 'name': 'event {}'.format(i),
                 'type': 'welcome, it\'s a "dummy" text',
             })
-        self.print(output, data)
+        self._print_formatted(output, data)
 
     def another_command(self, output, meows=None):
         # validate user inputs
@@ -45,4 +46,4 @@ class DummyCommand(AbstractCommand):
             })
 
         # print result
-        self.print(output, data)
+        self._print_formatted(output, data)
